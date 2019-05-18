@@ -32,7 +32,7 @@ public class ChatClient {
 						
 						arg0.pipeline().addLast(new SFPDecoder());
 						arg0.pipeline().addLast(new SFPEncoder());
-						arg0.pipeline().addLast(new ChatClientHandler());
+						arg0.pipeline().addLast(new ChatClientHandler());//
 					}
 				});
 			//发起异步连接操作

@@ -45,7 +45,7 @@ public class HttpHandler extends SimpleChannelInboundHandler<FullHttpRequest> {
 			contentType = "image/"+type;
 		}
 		response.headers().set(HttpHeaders.Names.CONTENT_TYPE, contentType+"; charset=utf-8");
-		boolean keepAlive = HttpHeaders.isKeepAlive(request);
+		boolean keepAlive = HttpHeaders.isKeepAlive(request);///
 		if(keepAlive){
 			//如果请求是一个长连接
 			response.headers().set(HttpHeaders.Names.CONTENT_LENGTH, file.length());

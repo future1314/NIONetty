@@ -59,22 +59,22 @@ public class ChatServer {
 						ChannelPipeline pipeline = arg0.pipeline();
 						pipeline.addLast(new SFPDecoder());
 						pipeline.addLast(new SFPEncoder());
-						pipeline.addLast(new SFPHandler());
+						pipeline.addLast(new SFPHandler());///
 						
 						
 						//支持Http协议
 						//Http请求处理的编解码器
-						pipeline.addLast(new HttpServerCodec());
+						pipeline.addLast(new HttpServerCodec());//
 						//用于将HTTP请求进行封装为FullHttpRequest对象
-						pipeline.addLast(new HttpObjectAggregator(1024*64));
+						pipeline.addLast(new HttpObjectAggregator(1024*64));//
 						//处理文件流
-						pipeline.addLast(new ChunkedWriteHandler());
+						pipeline.addLast(new ChunkedWriteHandler());//
 						//Http请求的具体处理对象
-						pipeline.addLast(new HttpHandler());
+						pipeline.addLast(new HttpHandler());///
 
 						//支持WebSocket协议
 						pipeline.addLast(new WebSocketServerProtocolHandler("/im"));
-						pipeline.addLast(new WebSocketHandler());
+						pipeline.addLast(new WebSocketHandler());///
 					}
 				});
 			//绑定端口，同步等待成功（sync()：同步阻塞方法，等待bind操作完成才继续）

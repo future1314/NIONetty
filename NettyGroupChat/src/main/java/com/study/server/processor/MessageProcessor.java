@@ -14,12 +14,12 @@ import io.netty.util.concurrent.GlobalEventExecutor;
 public class MessageProcessor {
 
 	//用于记录/管理所有客户端的Channel
-	private static ChannelGroup users = new DefaultChannelGroup(GlobalEventExecutor.INSTANCE);
+	private static ChannelGroup users = new DefaultChannelGroup(GlobalEventExecutor.INSTANCE);///
 	
 	private MessageCodec codec = new MessageCodec();
 	
 	//设置一些Channel的属性
-	private AttributeKey<String> nickName = AttributeKey.valueOf("nickName"); 
+	private AttributeKey<String> nickName = AttributeKey.valueOf("nickName"); ///
 	
 	public void messageHandler(Channel client, String message){
 		if(message == null || "".equals(message.trim())){
@@ -28,7 +28,7 @@ public class MessageProcessor {
 		System.out.println("客户端发送的消息："+message);
 		
 		MessageObject msgObj = codec.decoder(message);
-		if(msgObj.getCmd().equals(MessageStatus.LOGIN)){
+		if(msgObj.getCmd().equals(MessageStatus.LOGIN)){///
 			//为Channel绑定昵称属性
 			client.attr(nickName).set(msgObj.getNickName());
 			
@@ -56,6 +56,20 @@ public class MessageProcessor {
 				//重新编码
 				String content = codec.encoder(msgObj);
 				channel.writeAndFlush(new TextWebSocketFrame(content));
+			}
+		}////add by me  网页客户端 发送 exit 通讯没有停止，控制台客户端发送exit，没有收到退出的提醒，但是无法再发送消息，已经退出。
+		else if(msgObj.getContent().contains("exit")) {//
+			for (Channel channel : users) {
+				if(channel == client){
+					//发送给自己
+					msgObj.setNickName("SELF");//这个是干嘛的。。。
+				}else{
+					msgObj.setNickName(client.attr(nickName).get());
+				}
+				//重新编码
+				String content = codec.encoder(msgObj);
+				channel.writeAndFlush("你已经退出聊天。。。");//没有返回给客户端。。。
+				logout(channel);
 			}
 		}
 	}
